@@ -1,4 +1,4 @@
-using Core.View;
+using Core.UI;
 using UnityEngine;
 
 namespace Core.Controls

@@ -1,4 +1,5 @@
 using System;
+using Common;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -8,40 +9,40 @@ namespace Assets
 {
     public class AssetLoader 
     {
-        public async UniTask<T> LoadAsync<T>(string key) 
+        public async UniTask<T> LoadAsync<T>(AssetName key) 
         {
-            var opHandle = Addressables.LoadAssetAsync<GameObject>(key);
+            var opHandle = Addressables.LoadAssetAsync<GameObject>(key.Name);
             await opHandle.ToUniTask();
 
             if (opHandle.Status == AsyncOperationStatus.Failed)
             {
-                throw new Exception($"Не удалось загрузить ассет {key}");
+                throw new Exception($"Не удалось загрузить ассет {key.Name}");
             }
             var obj = opHandle.Result.GetComponent<T>();
 
             if (obj == null)
             {
-                throw new Exception($"Компонент типа {typeof(T)} не найден на загруженном GameObject {key}");
+                throw new Exception($"Компонент типа {typeof(T)} не найден на загруженном GameObject {key.Name}");
             }
 
             return obj;
         }
 
-        public T LoadSync<T>(string key)
+        public T LoadSync<T>(AssetName key)
         {
-            var opHandle = Addressables.LoadAssetAsync<GameObject>(key);
+            var opHandle = Addressables.LoadAssetAsync<GameObject>(key.Name);
             opHandle.WaitForCompletion();
 
             if (opHandle.Status == AsyncOperationStatus.Failed)
             {
-                throw new Exception($"Не удалось загрузить ассет {key}");
+                throw new Exception($"Не удалось загрузить ассет {key.Name}");
             }
 
             var obj = opHandle.Result.GetComponent<T>();
 
             if (obj == null)
             {
-                throw new Exception($"Компонент типа {typeof(T)} не найден на загруженном GameObject {key}");
+                throw new Exception($"Компонент типа {typeof(T)} не найден на загруженном GameObject {key.Name}");
             }
 
             return obj;

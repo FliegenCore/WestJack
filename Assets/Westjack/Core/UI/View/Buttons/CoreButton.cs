@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Core.View
+namespace Core.UI
 {
     public class CoreButton : MonoBehaviour
     {
@@ -12,7 +12,7 @@ namespace Core.View
 
         private void Awake()
         {
-            m_Button.onClick.AddListener(OnClick);
+            m_Button.onClick.AddListener(Click);
         }
 
         public void Subscribe(Action action)
@@ -25,7 +25,7 @@ namespace Core.View
             m_OnClick -= action;
         }
 
-        private void OnClick()
+        protected virtual void Click()
         {
             m_OnClick?.Invoke();
         }
