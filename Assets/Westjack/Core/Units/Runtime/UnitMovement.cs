@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using UnityEngine;
 
@@ -14,7 +15,7 @@ namespace Core.UnitEntities
         private Vector2Int m_CurrentPosition;
         private Transform m_Transform;
 
-        private bool m_IsMoveEnd;
+        private bool m_CanMove;
 
         public void Init(IMoveProvider moveProvider)
         {
@@ -22,51 +23,44 @@ namespace Core.UnitEntities
 
             m_CurrentPosition = new Vector2Int((int)transform.position.x, (int)transform.position.y);
             m_MoveProvider = moveProvider;
-            m_MoveProvider.OnMove += StartMove;
-            OnMoveEnd += Print;
+            Enable();
+            m_MoveProvider.OnMove += Move;
         }
 
-        private void Print()
+        private void Move(Vector2Int direction)
         {
-            Debug.Log("End move");
-        }
-
-        private void StartMove(Vector2Int direction)
-        {
-            m_CurrentPosition += direction;
-            m_IsMoveEnd = false;
-        }
-
-        private void Update()
-        {
-            Move();
-        }
-
-        private void Move()
-        {
-            if (m_IsMoveEnd)
+            if (!m_CanMove)
             {
                 return;
             }
+            m_CanMove = false;
 
-            Vector2Int playerPosition = new Vector2Int((int)m_Transform.position.x, (int)m_Transform.position.y);
+            m_CurrentPosition += direction;
 
-            float multiplyer = m_MoveSpeed * Time.deltaTime;
+            Vector3 newPosition = new Vector3(m_CurrentPosition.x, m_CurrentPosition.y);
 
-            Vector2 newPosition = new Vector2(m_CurrentPosition.x, m_CurrentPosition.y);
+            m_Transform.DOMove(newPosition, 0.15f).SetEase(Ease.OutSine).OnComplete(EndMove);
+        }
 
-            m_Transform.position = Vector3.MoveTowards(m_Transform.position, newPosition, multiplyer);
+        private void EndMove()
+        {
+            m_CanMove = true;
+            OnMoveEnd?.Invoke();
+        }
 
-            if (playerPosition == m_CurrentPosition)
-            {
-                OnMoveEnd?.Invoke();
-                m_IsMoveEnd = true;
-            }
+        public void Enable()
+        {
+            m_CanMove = true;
+        }
+
+        public void Disable()
+        {
+            m_CanMove = false;
         }
 
         private void OnDestroy()
         {
-            m_MoveProvider.OnMove -= StartMove;
+            m_MoveProvider.OnMove -= Move;
         }
     }
 }

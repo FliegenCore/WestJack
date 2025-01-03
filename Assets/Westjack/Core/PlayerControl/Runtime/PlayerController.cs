@@ -15,6 +15,11 @@ namespace Core.PlayerExperience
 
         private Player m_Player;
 
+        public Transform GetPlayerTransform()
+        {
+            return m_Player.transform;
+        }
+
         public void PreInit()
         {
             var playerAsset = m_AssetLoader.LoadSync<Player>(m_PlayerPrefabName);
@@ -25,6 +30,8 @@ namespace Core.PlayerExperience
         {
             m_Player.Init(m_Joystick);
         }
+
+       
     }
 
 }
