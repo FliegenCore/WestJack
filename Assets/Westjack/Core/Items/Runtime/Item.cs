@@ -5,13 +5,13 @@ namespace Core.World
 {
     public class Item : MonoBehaviour, IInteractable
     {
-        public event Action OnTake;
+        public event Action<IInteractable> OnTake;
 
         public bool IsEnemy { get; set; }
 
-        public void Interact()
+        public void Interact(IInteractable intareactable)
         {
-            OnTake?.Invoke();
+            OnTake?.Invoke(intareactable);
             gameObject.SetActive(false);
         }
     }

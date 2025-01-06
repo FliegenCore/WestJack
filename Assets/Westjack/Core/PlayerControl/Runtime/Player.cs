@@ -36,7 +36,7 @@ namespace Core.PlayerExperience
 
             if (interactable.IsEnemy)
             {
-                interactable.Interact();
+                interactable.Interact(this);
             }
         }
 
@@ -47,10 +47,10 @@ namespace Core.PlayerExperience
                 return;
             }
 
-            interactable.Interact();  
+            interactable.Interact(this);  
         }
 
-        public void Interact()
+        public void Interact(IInteractable intareactable)
         {
             Debug.Log("Player");
         }

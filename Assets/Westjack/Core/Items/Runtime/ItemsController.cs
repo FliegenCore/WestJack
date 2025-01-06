@@ -1,6 +1,7 @@
 using Assets;
 using Common;
 using Common.Utils;
+using Core.PlayerExperience;
 using UnityEngine;
 
 namespace Core.World
@@ -23,7 +24,15 @@ namespace Core.World
             { 
                 m_Item = m_AssetLoader.InstantiateSync(itemAsset, tileRes.Object.transform);
                 m_FloorController.FillTile(m_Item, 2, 2);
+                m_Item.OnTake += Pos;
             }
+        }
+
+        private void Pos(IInteractable interactable)
+        {
+            Player player = interactable as Player;
+
+            Debug.Log(player.Position);
         }
 
         public void Init()
