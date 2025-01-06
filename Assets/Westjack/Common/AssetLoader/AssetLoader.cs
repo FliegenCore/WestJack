@@ -12,6 +12,7 @@ namespace Assets
         public async UniTask<T> LoadAsync<T>(AssetName key) 
         {
             var opHandle = Addressables.LoadAssetAsync<GameObject>(key.Name);
+
             await opHandle.ToUniTask();
 
             if (opHandle.Status == AsyncOperationStatus.Failed)
