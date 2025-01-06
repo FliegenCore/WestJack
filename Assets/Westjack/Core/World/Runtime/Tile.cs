@@ -4,7 +4,7 @@ namespace Core.World
 {
     public class Tile : MonoBehaviour
     {
-        public IInteractable m_InteractableEntity;
+        public IInteractable InteractableEntity;
 
         public Vector2Int Position { 
             get 

@@ -59,6 +59,17 @@ namespace Core.World
             return TryGetTile(pos.x, pos.y);
         }
 
+        public void FillTile(IInteractable interactable, int x, int y)
+        {
+            Result<Tile> tileRes = TryGetTile(x, y);
+
+            if (tileRes.IsExit)
+            { 
+                tileRes.Object.InteractableEntity = interactable;
+            }
+        }
+
+
         private async void SpawnAnimation()
         {
             foreach (var tile in m_Floor.Tiles)
@@ -72,6 +83,7 @@ namespace Core.World
                 tile.transform.DOScale(Vector3.one, 0.25f);
             }
         }
+
 
         private void OnDestroy()
         {

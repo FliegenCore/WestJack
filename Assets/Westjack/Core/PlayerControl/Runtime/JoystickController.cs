@@ -17,9 +17,9 @@ namespace Core.UnitEntities
 
         private readonly AssetName m_JoystickAssetName = "Joystick";
         private JoystickView m_JoystickView;
-
+        
         private ControlMoveButton[] m_ControlButtons;
-
+        
         public async void PreInit()
         {
             var joystickAsset = await m_AssetLoader.LoadAsync<JoystickView>(m_JoystickAssetName);
