@@ -86,7 +86,7 @@ namespace Core.UnitEntities
                 return true;
             }
 
-            if (!tile.InteractableEntity.IsEnemy)
+            if (!tile.InteractableEntity.IsConsumable)
             {
                 m_CurrentPosition += direction;
                 positionIsChange = true;

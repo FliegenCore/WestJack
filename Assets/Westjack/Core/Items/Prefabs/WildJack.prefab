@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1345021599864259683}
   - component: {fileID: 4098338138211448935}
-  - component: {fileID: 6934501130667252849}
+  - component: {fileID: 6181000118023038078}
   m_Layer: 0
-  m_Name: Circle
+  m_Name: WildJack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -88,7 +88,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6934501130667252849
+--- !u!114 &6181000118023038078
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -97,6 +97,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 2134379510181017872}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce097c9dc7eebbd42912c850a0c94631, type: 3}
+  m_Script: {fileID: 11500000, guid: 7e02c44f45369464ba335971cfb2b7ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

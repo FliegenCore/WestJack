@@ -3,15 +3,29 @@ using UnityEngine;
 
 namespace Core.World
 {
-    public class Item : MonoBehaviour, IInteractable
+    public abstract class Item : MonoBehaviour, IInteractable
     {
         public event Action<IInteractable> OnTake;
 
-        public bool IsEnemy { get; set; }
-
-        public void Interact(IInteractable intareactable)
+        public Vector2Int Position
         {
-            OnTake?.Invoke(intareactable);
+            get
+            {
+                return new Vector2Int((int)transform.position.x, (int)transform.position.y);
+            }
+        }
+
+        public bool IsConsumable { get; set; }
+
+        public abstract void Interact(IInteractable intareactable);
+
+        public void Enable()
+        {
+            gameObject.SetActive(true);
+        }
+
+        public void Disable()
+        {
             gameObject.SetActive(false);
         }
     }

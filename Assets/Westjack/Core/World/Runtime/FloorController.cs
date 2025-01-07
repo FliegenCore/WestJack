@@ -33,7 +33,7 @@ namespace Core.World
 
         public void Init()
         {
-
+            m_EventManager.Subscribe<ResetTileSignal, Vector2Int>(this, ResetTile);
         }
 
         public Result<Tile> TryGetTile(int x, int y)
@@ -69,7 +69,6 @@ namespace Core.World
             }
         }
 
-
         private async void SpawnAnimation()
         {
             foreach (var tile in m_Floor.Tiles)
@@ -84,10 +83,19 @@ namespace Core.World
             }
         }
 
+        private void ResetTile(Vector2Int position)
+        {
+            Result<Tile> tileRes = TryGetTile(position);
+
+            if (tileRes.IsExit)
+            {
+                tileRes.Object.InteractableEntity = null;
+            }
+        }
 
         private void OnDestroy()
         {
-            
+            m_EventManager.Unsubscribe<ResetTileSignal>(this);
         }
     }
 }

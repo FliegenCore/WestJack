@@ -2,7 +2,7 @@ namespace Core.World
 {
     public interface IInteractable
     {
-        bool IsEnemy { get; set; }
+        bool IsConsumable { get; set; }
         void Interact(IInteractable intareactable);
     }
 }

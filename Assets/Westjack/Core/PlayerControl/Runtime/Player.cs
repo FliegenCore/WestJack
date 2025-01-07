@@ -16,11 +16,11 @@ namespace Core.PlayerExperience
             }
         }
 
-        public bool IsEnemy { get; set; }
+        public bool IsConsumable { get; set; }
 
         public void Init(IMoveProvider moveProvider, FloorController floorController)
         {
-            IsEnemy = true;
+            IsConsumable = true;
             m_UnitMovement = GetComponent<UnitMovement>();
             m_UnitMovement.Init(moveProvider, floorController);
             m_UnitMovement.OnStartMove += InteractWithEntityOnStart;
@@ -34,7 +34,7 @@ namespace Core.PlayerExperience
                 return;
             }
 
-            if (interactable.IsEnemy)
+            if (interactable.IsConsumable)
             {
                 interactable.Interact(this);
             }
