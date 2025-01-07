@@ -1,5 +1,6 @@
 using Assets;
 using Common;
+using Common.Utils;
 using Core.UnitEntities;
 using Core.World;
 using UnityEngine;
@@ -25,8 +26,13 @@ namespace Core.PlayerExperience
         public void PreInit()
         {
             var playerAsset = m_AssetLoader.LoadSync<Player>(m_PlayerPrefabName);
-            m_Player = m_AssetLoader.InstantiateSync(playerAsset, null);
-            m_FloorController.FillNotConsumableTile(m_Player, m_Player.Position.x, m_Player.Position.y);
+            Result<Tile> tileRes = m_FloorController.TryGetTile(0,0);
+
+            if(tileRes.IsExit)
+            {
+                m_Player = m_AssetLoader.InstantiateSync(playerAsset, tileRes.Object.transform);
+                m_FloorController.FillNotConsumableTile(m_Player, m_Player.Position.x, m_Player.Position.y);
+            }
         }
 
         public void Init()

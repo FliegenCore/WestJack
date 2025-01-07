@@ -92,8 +92,6 @@ namespace Core.UnitEntities
         {
             m_CanMove = true;
 
-            Debug.Log(tile);
-
             tile.NotConsumableInteractive = m_IInteractable;
             OnEndMove?.Invoke(tile);
         }

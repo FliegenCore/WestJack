@@ -2,8 +2,6 @@ using Assets;
 using Common;
 using Common.Utils;
 using Core.Common;
-using Core.PlayerExperience;
-using Core.UnitEntities;
 using UnityEngine;
 
 namespace Core.World
@@ -48,5 +46,4 @@ namespace Core.World
             m_WildJack.OnTake -= _ => ResetItem();
         }
     }
-
 }
