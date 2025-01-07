@@ -26,15 +26,17 @@ namespace Core.World
             if (tileRes.IsExit)
             { 
                 m_Item = m_AssetLoader.InstantiateSync(itemAsset, tileRes.Object.transform);
-                m_FloorController.FillTile(m_Item, 2, 2);
-                m_Item.OnTake += _ => ResetItem();
+                m_FloorController.FillConsumableTile(m_Item, 2, 2);
             }
+
+            m_Item.OnTake += _ => ResetItem();
         }
 
         private void ResetItem()
         {
             m_EventManager.TriggerEvenet<ResetTileSignal, Vector2Int>(m_Item.Position);
             m_Item.Disable();
+            Debug.Log("ResetItem");
         }
 
         public void Init()

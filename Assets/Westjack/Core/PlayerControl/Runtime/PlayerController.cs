@@ -26,7 +26,7 @@ namespace Core.PlayerExperience
         {
             var playerAsset = m_AssetLoader.LoadSync<Player>(m_PlayerPrefabName);
             m_Player = m_AssetLoader.InstantiateSync(playerAsset, null);
-            m_FloorController.FillTile(m_Player, m_Player.Position.x, m_Player.Position.y);
+            m_FloorController.FillNotConsumableTile(m_Player, m_Player.Position.x, m_Player.Position.y);
         }
 
         public void Init()

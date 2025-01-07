@@ -33,7 +33,7 @@ namespace Core.World
 
         public void Init()
         {
-            m_EventManager.Subscribe<ResetTileSignal, Vector2Int>(this, ResetTile);
+            m_EventManager.Subscribe<ResetTileSignal, Vector2Int>(this, ResetConsumableTile);
         }
 
         public Result<Tile> TryGetTile(int x, int y)
@@ -59,13 +59,23 @@ namespace Core.World
             return TryGetTile(pos.x, pos.y);
         }
 
-        public void FillTile(IInteractable interactable, int x, int y)
+        public void FillConsumableTile(IInteractable interactable, int x, int y)
         {
             Result<Tile> tileRes = TryGetTile(x, y);
 
             if (tileRes.IsExit)
             { 
-                tileRes.Object.InteractableEntity = interactable;
+                tileRes.Object.ConsumableInteractive = interactable;
+            }
+        }
+
+        public void FillNotConsumableTile(IInteractable interactable, int x, int y)
+        {
+            Result<Tile> tileRes = TryGetTile(x, y);
+
+            if (tileRes.IsExit)
+            {
+                tileRes.Object.NotConsumableInteractive = interactable;
             }
         }
 
@@ -83,13 +93,39 @@ namespace Core.World
             }
         }
 
-        private void ResetTile(Vector2Int position)
+        private void ResetConsumableTile(Vector2Int position)
         {
             Result<Tile> tileRes = TryGetTile(position);
 
             if (tileRes.IsExit)
             {
-                tileRes.Object.InteractableEntity = null;
+                tileRes.Object.ConsumableInteractive = null;
+            }
+        }
+
+        private void ResetNotConsumableTile(Vector2Int position)
+        {
+            Result<Tile> tileRes = TryGetTile(position);
+
+            if (tileRes.IsExit)
+            {
+                tileRes.Object.NotConsumableInteractive = null;
+            }
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+
+                foreach (var tile in m_Floor.Tiles)
+                {
+                    if (tile.ConsumableInteractive == null && tile.NotConsumableInteractive == null)
+                    {
+                        continue;
+                    }
+                    Debug.Log($"{tile.Position} | {tile.ConsumableInteractive} | {tile.NotConsumableInteractive}");
+                }
             }
         }
 

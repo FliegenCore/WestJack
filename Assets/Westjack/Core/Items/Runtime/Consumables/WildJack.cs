@@ -5,8 +5,6 @@ namespace Core.World
 {
     public class WildJack : Item
     {
-
-
         public override void Interact(IInteractable interactable)
         {
             if (interactable is not Player)
@@ -15,8 +13,14 @@ namespace Core.World
             }
 
             Player player = interactable as Player;
-
+            player.UnitHealth.SubscribeOnHealthChanged(Print);
+            player.UnitHealth.TakeDamage(1);
             
+        }
+
+        private void Print(int health)
+        {
+            Debug.Log(health);
         }
     }
 }

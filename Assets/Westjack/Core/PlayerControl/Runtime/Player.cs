@@ -7,6 +7,7 @@ namespace Core.PlayerExperience
     public class Player : MonoBehaviour, IInteractable
     {
         private UnitMovement m_UnitMovement;
+        private UnitHealth m_UnitHealth;
 
         public Vector2Int Position
         {
@@ -15,6 +16,7 @@ namespace Core.PlayerExperience
                 return new Vector2Int((int)transform.position.x, (int)transform.position.y);
             }
         }
+        public UnitHealth UnitHealth => m_UnitHealth;
 
         public bool IsConsumable { get; set; }
 
@@ -22,32 +24,33 @@ namespace Core.PlayerExperience
         {
             IsConsumable = true;
             m_UnitMovement = GetComponent<UnitMovement>();
+            m_UnitHealth = GetComponent<UnitHealth>();
+
             m_UnitMovement.Init(moveProvider, floorController);
             m_UnitMovement.OnStartMove += InteractWithEntityOnStart;
             m_UnitMovement.OnEndMove += InteractWithEntityOnEnd;
+
+            m_UnitHealth.Init();
         }
 
-        private void InteractWithEntityOnStart(IInteractable interactable)
+        private void InteractWithEntityOnStart(Tile tile)
         {
-            if (interactable == null)
+            if (tile.NotConsumableInteractive == null)
             {
                 return;
             }
 
-            if (interactable.IsConsumable)
-            {
-                interactable.Interact(this);
-            }
+            tile.NotConsumableInteractive.Interact(this);
         }
 
-        private void InteractWithEntityOnEnd(IInteractable interactable)
+        private void InteractWithEntityOnEnd(Tile tile)
         {
-            if (interactable == null)
+            if (tile.ConsumableInteractive == null)
             {
                 return;
             }
 
-            interactable.Interact(this);  
+            tile.ConsumableInteractive.Interact(this); 
         }
 
         public void Interact(IInteractable intareactable)

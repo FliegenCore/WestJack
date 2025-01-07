@@ -8,8 +8,8 @@ namespace Core.UnitEntities
 {
     public class UnitMovement : MonoBehaviour
     {
-        public event Action<IInteractable> OnStartMove;
-        public event Action<IInteractable> OnEndMove;
+        public event Action<Tile> OnStartMove;
+        public event Action<Tile> OnEndMove;
 
         private const float m_MoveSpeed = 10f;
 
@@ -57,7 +57,6 @@ namespace Core.UnitEntities
             {
                 m_Transform.DOMove(newPosition, 0.15f).SetEase(Ease.OutSine)
                     .OnComplete(() => EndMove(tile.Object));
-
             }
         }
 
@@ -67,7 +66,7 @@ namespace Core.UnitEntities
 
             if (tile.IsExit)
             {
-                tile.Object.InteractableEntity = null;
+                tile.Object.NotConsumableInteractive = null;
             }
         }
 
@@ -76,20 +75,14 @@ namespace Core.UnitEntities
             m_CanMove = false;
             bool positionIsChange = false;
 
-            OnStartMove?.Invoke(tile.InteractableEntity);
+            OnStartMove?.Invoke(tile);
 
-            if (tile.InteractableEntity == null)
+            if (tile.NotConsumableInteractive == null)
             {
-                tile.InteractableEntity = m_IInteractable;
+                tile.NotConsumableInteractive = m_IInteractable;
                 m_CurrentPosition += direction;
 
                 return true;
-            }
-
-            if (!tile.InteractableEntity.IsConsumable)
-            {
-                m_CurrentPosition += direction;
-                positionIsChange = true;
             }
 
             return positionIsChange;
@@ -98,14 +91,11 @@ namespace Core.UnitEntities
         private void EndMove(Tile tile)
         {
             m_CanMove = true;
-            if (tile.InteractableEntity == m_IInteractable)
-            {
-                OnEndMove?.Invoke(null);
-                return;
-            }
 
-            OnEndMove?.Invoke(tile.InteractableEntity);
-            tile.InteractableEntity = m_IInteractable;
+            Debug.Log(tile);
+
+            tile.NotConsumableInteractive = m_IInteractable;
+            OnEndMove?.Invoke(tile);
         }
 
         public void Enable()
