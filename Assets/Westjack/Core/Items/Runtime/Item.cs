@@ -5,7 +5,7 @@ namespace Core.World
 {
     public abstract class Item : MonoBehaviour, IInteractable
     {
-        public event Action<IInteractable> OnTake;
+        public abstract event Action<IInteractable> OnTake;
 
         public Vector2Int Position
         {
