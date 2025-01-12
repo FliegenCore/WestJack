@@ -27,7 +27,6 @@ namespace Core.UnitEntities
         {
             m_Transform = transform;
             m_FloorController = moveProvider.FloorController;
-            Debug.Log(m_FloorController);
             m_CurrentPosition = new Vector2Int((int)transform.position.x, (int)transform.position.y);
             m_MoveProvider = moveProvider;
             m_IInteractable = GetComponent<IInteractable>();
@@ -62,9 +61,10 @@ namespace Core.UnitEntities
 
             RemoveUnitFormTile();
 
-            OnMove?.Invoke();
 
             bool positionIsChanged = StartMove(tile.Object, direction);
+
+            OnMove?.Invoke();
 
             Vector3 newPosition = new Vector3(m_CurrentPosition.x, m_CurrentPosition.y);
 

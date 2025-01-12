@@ -6,6 +6,8 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.LightTransport.IProbeIntegrator;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 namespace Core.World
 {
@@ -58,10 +60,40 @@ namespace Core.World
             return TryGetTile(pos.x, pos.y);
         }
 
-        //public Tile FindNearestTile(Vector2Int current, Vector2Int target)
-        //{ 
-            
-        //}
+        public Result<Tile> FindNearestTile(Vector2Int current, Vector2Int target)
+        {
+            Result<Tile> nearestTile = new Result<Tile>();
+
+            //TODO fix allocations
+            List<Result<Tile>> neighbors = new List<Result<Tile>>
+            {
+                TryGetTile(current.x + 1, current.y),
+                TryGetTile(current.x - 1, current.y),
+                TryGetTile(current.x, current.y + 1),
+                TryGetTile(current.x, current.y - 1)
+            };
+
+            float distance;
+            float minDistanceSquared = float.PositiveInfinity;
+
+            foreach (var neighbor in neighbors)
+            {
+                if (!neighbor.IsExist)
+                {
+                    continue;
+                }
+
+                distance = (neighbor.Object.Position - target).sqrMagnitude;
+
+                if (distance < minDistanceSquared)
+                {
+                    minDistanceSquared = distance;
+                    nearestTile = neighbor;
+                }
+            }
+
+            return nearestTile;
+        }
 
         public void FillConsumableTile(IInteractable interactable, int x, int y)
         {

@@ -17,7 +17,7 @@ namespace Core.UnitEntities
 
         public void Interact(IInteractable intareactable)
         {
-            Debug.Log("Fight");
+            Debug.Log("Start fight with " + name);
         }
 
         public void EndMove(Tile tile)

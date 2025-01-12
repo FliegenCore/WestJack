@@ -1,3 +1,4 @@
+using Common.Utils;
 using Core.PlayerExperience;
 using Core.World;
 using System;
@@ -24,10 +25,14 @@ namespace Core.UnitEntities
 
         public void DoTurn()
         {
-            //choose side 
-            Vector2Int side = new Vector2Int(1, 0);
+            Vector2Int side = new Vector2Int();
 
-            
+            Result<Tile> tileRes = m_FloorController.FindNearestTile(m_Unit.Position, m_Player.Unit.Position);
+
+            if (tileRes.IsExist)
+            {
+                side = tileRes.Object.Position - m_Unit.Position;
+            }
 
             OnMove?.Invoke(side);
         }
