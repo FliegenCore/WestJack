@@ -21,7 +21,6 @@ namespace Core.PlayerExperience
         public void Interact(IInteractable interactable)
         {
             Debug.Log("Start fight with " + name);
-            //start fight with interactable
         }
 
         public void EndMove(Tile tile)
