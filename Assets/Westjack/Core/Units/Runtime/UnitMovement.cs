@@ -8,6 +8,7 @@ namespace Core.UnitEntities
 {
     public class UnitMovement : MonoBehaviour
     {
+        public event Action OnMove;
         public event Action<Tile> OnStartMove;
         public event Action<Tile> OnEndMove;
 
@@ -22,15 +23,27 @@ namespace Core.UnitEntities
 
         private bool m_CanMove;
 
-        public void Init(IMoveProvider moveProvider, FloorController floorController)
+        public void Init(IMoveProvider moveProvider)
         {
             m_Transform = transform;
-            m_FloorController = floorController;
+            m_FloorController = moveProvider.FloorController;
+            Debug.Log(m_FloorController);
             m_CurrentPosition = new Vector2Int((int)transform.position.x, (int)transform.position.y);
             m_MoveProvider = moveProvider;
             m_IInteractable = GetComponent<IInteractable>();
             Enable();
+
             m_MoveProvider.OnMove += Move;
+        }
+
+        public void Enable()
+        {
+            m_CanMove = true;
+        }
+
+        public void Disable()
+        {
+            m_CanMove = false;
         }
 
         private void Move(Vector2Int direction)
@@ -40,14 +53,16 @@ namespace Core.UnitEntities
                 return;
             }
 
-            RemoveUnitFormTile();
-
             Result<Tile> tile = m_FloorController.TryGetTile(m_CurrentPosition + direction);
 
-            if (!tile.IsExit)
+            if (!tile.IsExist)
             {
                 return;
             }
+
+            RemoveUnitFormTile();
+
+            OnMove?.Invoke();
 
             bool positionIsChanged = StartMove(tile.Object, direction);
 
@@ -64,7 +79,7 @@ namespace Core.UnitEntities
         {
             Result<Tile> tile = m_FloorController.TryGetTile(m_CurrentPosition);
 
-            if (tile.IsExit)
+            if (tile.IsExist)
             {
                 tile.Object.NotConsumableInteractive = null;
             }
@@ -96,19 +111,12 @@ namespace Core.UnitEntities
             OnEndMove?.Invoke(tile);
         }
 
-        public void Enable()
-        {
-            m_CanMove = true;
-        }
-
-        public void Disable()
-        {
-            m_CanMove = false;
-        }
-
         private void OnDestroy()
         {
-            m_MoveProvider.OnMove -= Move;
+            if (m_MoveProvider != null)
+            { 
+                m_MoveProvider.OnMove -= Move;
+            }
         }
     }
 }

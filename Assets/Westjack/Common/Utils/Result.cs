@@ -3,12 +3,12 @@ namespace Common.Utils
     public struct Result<T>
     {
         public readonly T Object;
-        public readonly bool IsExit;
+        public readonly bool IsExist;
 
         public Result(T result, bool isExit)
         {
             Object = result;
-            IsExit = isExit;
+            IsExist = isExit;
         }
     }
 }

@@ -21,7 +21,7 @@ namespace Core.World
         {
             var itemAsset = m_AssetLoader.LoadSync<WildJack>(m_AssetName);
             Result<Tile> tileRes = m_FloorController.TryGetTile(2,2);
-            if (tileRes.IsExit)
+            if (tileRes.IsExist)
             { 
                 m_WildJack = m_AssetLoader.InstantiateSync(itemAsset, tileRes.Object.transform);
                 m_FloorController.FillConsumableTile(m_WildJack, 2, 2);
@@ -32,7 +32,7 @@ namespace Core.World
 
         private void ResetItem()
         {
-            m_EventManager.TriggerEvenet<ResetTileSignal, Vector2Int>(m_WildJack.Position);
+            m_EventManager.TriggerEvenet<ResetConsumableTileSignal, Vector2Int>(m_WildJack.Position);
             m_WildJack.Disable();
             Debug.Log("ResetItem");
         }

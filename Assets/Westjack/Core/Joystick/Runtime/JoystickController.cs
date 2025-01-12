@@ -2,6 +2,7 @@ using Assets;
 using Common;
 using Core.Controls;
 using Core.UI;
+using Core.World;
 using System;
 using UnityEngine;
 
@@ -12,14 +13,18 @@ namespace Core.UnitEntities
     {
         public event Action<Vector2Int> OnMove;
 
+        private readonly AssetName m_JoystickAssetName = "Joystick";
+
         [Inject] private AssetLoader m_AssetLoader;
         [Inject] private CoreUIController m_CoreCanvasController;
 
-        private readonly AssetName m_JoystickAssetName = "Joystick";
         private JoystickView m_JoystickView;
         
         private ControlMoveButton[] m_ControlButtons;
-        
+        private FloorController m_FloorController;
+
+        public FloorController FloorController => m_FloorController;
+
         public async void PreInit()
         {
             var joystickAsset = await m_AssetLoader.LoadAsync<JoystickView>(m_JoystickAssetName);
@@ -36,11 +41,15 @@ namespace Core.UnitEntities
 
         public void Init()
         {
-
             
         }
 
-        private void Move(Vector2Int direction)
+        public void Init(FloorController floorController)
+        {
+            m_FloorController = floorController;
+        }
+
+        public void Move(Vector2Int direction)
         {
             OnMove?.Invoke(direction);
         }

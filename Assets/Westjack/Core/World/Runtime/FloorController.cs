@@ -4,6 +4,7 @@ using Common.Utils;
 using Core.Common;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Core.World
@@ -16,6 +17,7 @@ namespace Core.World
         [Inject] private AssetLoader m_AssetLoader;
         [Inject] private EventManager m_EventManager;
 
+        private Dictionary<Vector2Int, Tile> m_Tiles = new Dictionary<Vector2Int, Tile>();
         private Floor m_Floor;
         private FloorData m_FloorData;
 
@@ -27,13 +29,15 @@ namespace Core.World
 
             var floorAsset = m_AssetLoader.LoadSync<Floor>(m_AssetName.Name);
             m_Floor = m_AssetLoader.InstantiateSync(floorAsset, null);
-
-            SpawnAnimation();
         }
 
         public void Init()
         {
-            m_EventManager.Subscribe<ResetTileSignal, Vector2Int>(this, ResetConsumableTile);
+            m_EventManager.Subscribe<ResetConsumableTileSignal, Vector2Int>(this, ResetConsumableTile);
+            m_EventManager.Subscribe<ResetNotConsumableTileSignal, Vector2Int>(this, ResetNotConsumableTile);
+
+            FillTilesDictionary();
+            SpawnAnimation();
         }
 
         public Result<Tile> TryGetTile(int x, int y)
@@ -41,14 +45,9 @@ namespace Core.World
             Result<Tile> resTile = new Result<Tile>();
             Vector2Int pos = new Vector2Int(x, y);
 
-            foreach (var tile in m_Floor.Tiles)
+            if (m_Tiles.ContainsKey(pos))
             {
-                if (tile.Position == pos)
-                {
-                    resTile = new Result<Tile>(tile, true);
-
-                    break;
-                }
+                resTile = new Result<Tile>(m_Tiles[pos], true);
             }
 
             return resTile;
@@ -59,11 +58,16 @@ namespace Core.World
             return TryGetTile(pos.x, pos.y);
         }
 
+        //public Tile FindNearestTile(Vector2Int current, Vector2Int target)
+        //{ 
+            
+        //}
+
         public void FillConsumableTile(IInteractable interactable, int x, int y)
         {
             Result<Tile> tileRes = TryGetTile(x, y);
 
-            if (tileRes.IsExit)
+            if (tileRes.IsExist)
             { 
                 tileRes.Object.ConsumableInteractive = interactable;
             }
@@ -73,9 +77,17 @@ namespace Core.World
         {
             Result<Tile> tileRes = TryGetTile(x, y);
 
-            if (tileRes.IsExit)
+            if (tileRes.IsExist)
             {
                 tileRes.Object.NotConsumableInteractive = interactable;
+            }
+        }
+
+        private void FillTilesDictionary()
+        {
+            foreach (var tile in m_Floor.Tiles)
+            {
+                m_Tiles.Add(tile.Position, tile);
             }
         }
 
@@ -97,7 +109,7 @@ namespace Core.World
         {
             Result<Tile> tileRes = TryGetTile(position);
 
-            if (tileRes.IsExit)
+            if (tileRes.IsExist)
             {
                 tileRes.Object.ConsumableInteractive = null;
             }
@@ -107,7 +119,7 @@ namespace Core.World
         {
             Result<Tile> tileRes = TryGetTile(position);
 
-            if (tileRes.IsExit)
+            if (tileRes.IsExist)
             {
                 tileRes.Object.NotConsumableInteractive = null;
             }
@@ -117,7 +129,6 @@ namespace Core.World
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-
                 foreach (var tile in m_Floor.Tiles)
                 {
                     if (tile.ConsumableInteractive == null && tile.NotConsumableInteractive == null)
@@ -131,7 +142,8 @@ namespace Core.World
 
         private void OnDestroy()
         {
-            m_EventManager.Unsubscribe<ResetTileSignal>(this);
+            m_EventManager.Unsubscribe<ResetConsumableTileSignal>(this);
+            m_EventManager.Unsubscribe<ResetNotConsumableTileSignal>(this);
         }
     }
 }

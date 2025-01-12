@@ -19,6 +19,14 @@ namespace Core.Battle
         {
         }
 
-        
+        private void StartBattle()
+        { 
+            
+        }
+
+        private void OnDestroy()
+        {
+            
+        }
     }
 }

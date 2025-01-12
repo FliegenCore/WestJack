@@ -1,5 +1,6 @@
-using System;
 using Core.PlayerExperience;
+using Core.UnitEntities;
+using System;
 using UnityEngine;
 
 namespace Core.World
@@ -16,8 +17,8 @@ namespace Core.World
             }
 
             Player player = interactable as Player;
-            player.UnitHealth.SubscribeOnHealthChanged(Print);
-            player.UnitHealth.TakeDamage(1);
+            player.Unit.UnitHealth.SubscribeOnHealthChanged(Print);
+            player.Unit.UnitHealth.TakeDamage(1);
             OnTake?.Invoke(null);
         }
 
