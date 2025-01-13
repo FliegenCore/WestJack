@@ -61,10 +61,7 @@ namespace Core.UnitEntities
 
             RemoveUnitFormTile();
 
-
             bool positionIsChanged = StartMove(tile.Object, direction);
-
-            OnMove?.Invoke();
 
             Vector3 newPosition = new Vector3(m_CurrentPosition.x, m_CurrentPosition.y);
 
@@ -97,7 +94,11 @@ namespace Core.UnitEntities
                 tile.NotConsumableInteractive = m_IInteractable;
                 m_CurrentPosition += direction;
 
-                return true;
+                positionIsChange = true;
+            }
+            else
+            {
+                m_CanMove = true;
             }
 
             return positionIsChange;
@@ -106,8 +107,8 @@ namespace Core.UnitEntities
         private void EndMove(Tile tile)
         {
             m_CanMove = true;
-
             tile.NotConsumableInteractive = m_IInteractable;
+            OnMove?.Invoke();
             OnEndMove?.Invoke(tile);
         }
 
