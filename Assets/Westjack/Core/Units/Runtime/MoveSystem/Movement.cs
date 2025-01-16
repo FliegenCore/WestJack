@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Core.UnitEntities
 {
-    public class UnitMovement : MonoBehaviour
+    public class Movement : MonoBehaviour
     {
         public event Action OnMove;
         public event Action<Tile> OnStartMove;
@@ -18,10 +18,10 @@ namespace Core.UnitEntities
         private FloorController m_FloorController;
         private Vector2Int m_CurrentPosition;
         private IMoveProvider m_MoveProvider;
-
         private IInteractable m_IInteractable;
-
         private bool m_CanMove;
+
+        public Vector2Int CurrentPosition => m_CurrentPosition;
 
         public void Init(IMoveProvider moveProvider)
         {
@@ -69,6 +69,8 @@ namespace Core.UnitEntities
             {
                 m_Transform.DOMove(newPosition, 0.15f).SetEase(Ease.OutSine)
                     .OnComplete(() => EndMove(tile.Object));
+
+                OnMove?.Invoke();
             }
         }
 
@@ -108,7 +110,6 @@ namespace Core.UnitEntities
         {
             m_CanMove = true;
             tile.NotConsumableInteractive = m_IInteractable;
-            OnMove?.Invoke();
             OnEndMove?.Invoke(tile);
         }
 

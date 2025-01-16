@@ -5,8 +5,8 @@ namespace Core.UnitEntities
 {
     public class Unit : MonoBehaviour
     {
-        private UnitMovement m_UnitMovement;
-        private UnitHealth m_UnitHealth;
+        private Movement m_Movement;
+        private Health m_Health;
         private IMovable m_Movable;
         private IMoveProvider m_MoveProvider;
 
@@ -14,11 +14,12 @@ namespace Core.UnitEntities
         {
             get
             {
-                return new Vector2Int((int)transform.position.x, (int)transform.position.y);
+                return m_Movement.CurrentPosition;
             }
         }
-        public UnitHealth UnitHealth => m_UnitHealth;
-        public UnitMovement UnitMovement => m_UnitMovement;
+
+        public Health Health => m_Health;
+        public Movement Movement => m_Movement;
 
         public void InitMoveProvider(FloorController floorController, IMoveProvider moveProvider = null)
         {
@@ -36,22 +37,22 @@ namespace Core.UnitEntities
 
         public void Init()
         {
-            m_UnitMovement = GetComponent<UnitMovement>();
-            m_UnitHealth = GetComponent<UnitHealth>();
+            m_Movement = GetComponent<Movement>();
+            m_Health = GetComponent<Health>();
             m_Movable = GetComponent<IMovable>();
 
-            m_UnitMovement.Init(m_MoveProvider);
-            m_UnitHealth.Init();
+            m_Movement.Init(m_MoveProvider);
+            m_Health.Init();
 
-            m_UnitMovement.OnStartMove += m_Movable.StartMove;
-            m_UnitMovement.OnEndMove += m_Movable.EndMove;
+            m_Movement.OnStartMove += m_Movable.StartMove;
+            m_Movement.OnEndMove += m_Movable.EndMove;
         }
 
 
         private void OnDestroy()
         {
-            m_UnitMovement.OnStartMove -= m_Movable.StartMove;
-            m_UnitMovement.OnEndMove -= m_Movable.EndMove;
+            m_Movement.OnStartMove -= m_Movable.StartMove;
+            m_Movement.OnEndMove -= m_Movable.EndMove;
         }
     }
 }

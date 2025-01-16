@@ -6,10 +6,11 @@ using UnityEngine;
 
 namespace Core.PlayerExperience
 {
-    public class Player : MonoBehaviour, IMovable, IInteractable
+    public class Player : MonoBehaviour, IMovable, IInteractable, IDamagable, IHealthReseter
     {
         private Unit m_Unit;
         private EventManager m_EventManager;
+        private bool m_WasInteract;
 
         public Unit Unit => m_Unit;
 
@@ -20,7 +21,28 @@ namespace Core.PlayerExperience
 
         public void Interact(IInteractable interactable)
         {
+            if (m_WasInteract)
+            {
+                return;
+            }
+
+            m_WasInteract = true;
             Debug.Log("Start fight with " + name);
+        }
+
+        public void ToggleWasInteract(bool toggle)
+        {
+            m_WasInteract = toggle;
+        }
+
+        public void TakeDamage(int damage)
+        {
+            m_Unit.Health.TakeDamage(damage);
+        }
+
+        public void AddHealth(int health)
+        {
+            m_Unit.Health.RestoreHealth(health);
         }
 
         public void EndMove(Tile tile)
@@ -45,12 +67,12 @@ namespace Core.PlayerExperience
 
         public void SubscribeOnMove(Action action)
         {
-            m_Unit.UnitMovement.OnMove += action;
+            m_Unit.Movement.OnMove += action;
         }
 
         public void UnsubscribeOnMove(Action action)
         { 
-            m_Unit.UnitMovement.OnMove -= action;
+            m_Unit.Movement.OnMove -= action;
         }
     }
 }

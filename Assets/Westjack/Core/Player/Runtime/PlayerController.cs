@@ -21,6 +21,8 @@ namespace Core.PlayerExperience
 
         private Player m_Player;
 
+        public Player Player => m_Player;
+
         public Transform GetPlayerTransform()
         {
             return m_Player.transform;
@@ -34,8 +36,11 @@ namespace Core.PlayerExperience
             if(tileRes.IsExist)
             {
                 m_Player = m_AssetLoader.InstantiateSync(playerAsset, tileRes.Object.transform);
-
+                
                 m_Player.Init(m_EventManager);
+
+                m_Player.Unit.InitMoveProvider(m_FloorController, m_Joystick);
+                m_Player.Unit.Init();
 
                 m_FloorController.FillNotConsumableTile(m_Player, m_Player.Unit.Position.x, m_Player.Unit.Position.y);
             }
@@ -43,8 +48,7 @@ namespace Core.PlayerExperience
 
         public void Init()
         {
-            m_Player.Unit.InitMoveProvider(m_FloorController, m_Joystick);
-            m_Player.Unit.Init();
+            
         }
 
         public void SubscribeOnPlayerMove(Action action)

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Core.UnitEntities
 {
-    public class UnitHealth : MonoBehaviour
+    public class Health : MonoBehaviour
     {
         private HealthData m_HealthData;
 

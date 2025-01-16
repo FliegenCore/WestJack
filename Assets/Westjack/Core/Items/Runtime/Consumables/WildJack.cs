@@ -7,19 +7,17 @@ namespace Core.World
 {
     public class WildJack : Item
     {
-        public override event Action<IInteractable> OnTake;
+        public new event Action<IInteractable> OnTake;
 
         public override void Interact(IInteractable interactable)
         {
-            if (interactable is not Player)
-            {
-                return;
-            }
+            IHealthReseter health = (IHealthReseter) interactable;
 
-            Player player = interactable as Player;
-            player.Unit.UnitHealth.SubscribeOnHealthChanged(Print);
-            player.Unit.UnitHealth.TakeDamage(1);
-            OnTake?.Invoke(null);
+            if (health != null)
+            {
+                health.AddHealth(1);
+                OnTake?.Invoke(null);
+            }
         }
 
         private void Print(int health)
