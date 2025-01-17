@@ -21,6 +21,7 @@ namespace Core.Battle
         public void AddCard()
         {
             Result<Card> card = m_DeckController.TakeCard();
+
             if (card.IsExist)
             { 
                 OnCardAddedInOffer?.Invoke(card.Object);
@@ -30,6 +31,7 @@ namespace Core.Battle
         public void RemoveCard()
         {
             Result<Card> card = m_DeckController.TakeCard();
+
             if (card.IsExist)
             {
                 OnCardRemovedWithoutOffer?.Invoke(card.Object);

@@ -14,30 +14,38 @@ namespace Core.Battle
         [Inject] private CardsDeck m_DeckController;
         [Inject] private PlayerController m_PlayerController;
 
+        private BattleUI m_BattleUI;
         private CardsDeck m_CardsDeck;
 
-        private HandOffer m_PlayerHandOffer;
-        private HandOffer m_EnemyHandOffer;
+        private HandOffer m_HandOffer;
 
         private Enemy m_Enemy;
         private Player m_Player;
 
         public void PreInit()
         {
+            m_BattleUI = FindAnyObjectByType<BattleUI>();
+
             m_CardsDeck = new CardsDeck();
             m_Player = m_PlayerController.Player;
 
             m_CardsDeck.CreateDeck();
-            m_PlayerHandOffer = new HandOffer();
-            m_EnemyHandOffer = new HandOffer();
+            m_HandOffer = new HandOffer();
 
             m_EventManager.Subscribe<StartBattleSignal, Enemy>(this, StartBattle);
         }
 
         public void Init()
         {
-            m_PlayerHandOffer.Init(m_DeckController);
-            m_EnemyHandOffer.Init(m_DeckController);
+            m_HandOffer.Init(m_DeckController);
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+            { 
+                //m_HandOffer.
+            }
         }
 
         private void StartBattle(Enemy enemy)

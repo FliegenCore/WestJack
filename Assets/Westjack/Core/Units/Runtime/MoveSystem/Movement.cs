@@ -70,7 +70,6 @@ namespace Core.UnitEntities
                 m_Transform.DOMove(newPosition, 0.15f).SetEase(Ease.OutSine)
                     .OnComplete(() => EndMove(tile.Object));
 
-                OnMove?.Invoke();
             }
         }
 
@@ -111,6 +110,7 @@ namespace Core.UnitEntities
             m_CanMove = true;
             tile.NotConsumableInteractive = m_IInteractable;
             OnEndMove?.Invoke(tile);
+            OnMove?.Invoke();
         }
 
         private void OnDestroy()
