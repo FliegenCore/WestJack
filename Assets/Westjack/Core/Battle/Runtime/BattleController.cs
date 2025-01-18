@@ -42,6 +42,9 @@ namespace Core.Battle
 
             m_PlayerHand.Init();
             m_EnemyHand.Init();
+
+            m_BattleUI.PlayerHandView.Init();
+            m_BattleUI.EnemyHandView.Init();
         }
 
         public void Init()

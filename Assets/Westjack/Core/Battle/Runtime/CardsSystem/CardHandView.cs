@@ -1,4 +1,3 @@
-using Core.Battle;
 using DG.Tweening;
 using UnityEngine;
 
@@ -7,9 +6,34 @@ namespace Core.Battle
     public class CardHandView : CardView
     {
         //TODO: on hold show info
-        public void Enable()
+        private RectTransform m_Transform;
+
+        private float m_PositionX;
+
+        public CardHandView SetX(float x)
+        {
+            m_PositionX = x;
+
+            return this;
+        }
+
+        public CardHandView SetSpawnPositionX(float x)
+        {
+            if (m_Transform == null)
+            {
+                m_Transform = GetComponent<RectTransform>();
+            }
+
+            m_Transform.anchoredPosition = new Vector2(x, m_Transform.anchoredPosition.y);
+
+            return this;
+        }
+
+        public CardHandView Enable()
         {
             gameObject.SetActive(true);
+
+            return this;
         }
 
         public void Disable()
@@ -17,9 +41,14 @@ namespace Core.Battle
             gameObject.SetActive(false);    
         }
 
-        public void Shift(float distance)
+        public void Shift()
         {
-            transform.DOLocalMoveX(distance, 1f);
+            if (m_Transform == null)
+            {
+                m_Transform = GetComponent<RectTransform>();
+            }
+
+            transform.DOLocalMoveX(m_Transform.anchoredPosition.x + m_PositionX, 0.25f);
         }
     }
 }
