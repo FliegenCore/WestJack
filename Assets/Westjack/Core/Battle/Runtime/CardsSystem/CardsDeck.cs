@@ -37,6 +37,23 @@ namespace Core.Battle
             return result;
         }
 
+        public List<Card> TakeCards(int count)
+        {
+            List<Card> cards = new List<Card>();
+
+            for (int i = 0; i < count; i++)
+            {
+                Result<Card> cardRes = TakeCard();
+
+                if (cardRes.IsExist)
+                {
+                    cards.Add(cardRes.Object);
+                }
+            }
+
+            return cards;
+        }
+
         private void Shuffle()
         {
             System.Random rng = new System.Random();
