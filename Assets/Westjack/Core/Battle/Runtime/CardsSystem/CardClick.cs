@@ -15,7 +15,6 @@ namespace Core.Battle
 
         public void SetCard(Card card)
         {
-            m_CanTake = true;
             m_Card = card;
         }
 
@@ -35,6 +34,11 @@ namespace Core.Battle
         public void DisableInteractble()
         {
             m_CanTake = false;
+        }
+
+        public void EnableInteractble()
+        {
+            m_CanTake = true;
         }
 
         private void DoAnim()

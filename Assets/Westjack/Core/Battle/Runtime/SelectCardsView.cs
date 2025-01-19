@@ -1,5 +1,3 @@
-using Cysharp.Threading.Tasks;
-using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,22 +6,43 @@ namespace Core.Battle
 {
     public class SelectCardsView : MonoBehaviour
     {
-        public event Action OnCardsTurnAway;
-        public event Action OnCardsTurnAround;
-
         [SerializeField] private CardSelectView[] m_CardsView;
+
+        public void Init()
+        {
+            SubscribeOnCardClick(DisableChoose);
+
+            foreach (var card in m_CardsView)
+            {
+                card.OnTurnBack += card.Apply;
+                card.OnTurnFront += card.CardClick.EnableInteractble;
+            }
+        }
+
+        public void InitCards()
+        {
+            foreach (var card in m_CardsView)
+            {
+                card.Init();
+            }
+        }
+
+        public void StartSelect()
+        {
+            foreach (var card in m_CardsView)
+            {
+                card.SetSide(CardSide.Back);
+            }
+        }
 
         public void UpdateCards(List<Card> cards)
         {
-            TurnCardsAway(() =>
+            for (int i = 0; i < m_CardsView.Length; i++)
             {
-                for (int i = 0; i < m_CardsView.Length; i++)
-                {
-                    SubscribeOnCardClick(DisableChoose);
-                    m_CardsView[i].CardClick.SetCard(cards[i]);
-                    m_CardsView[i].SetRank((int)cards[i].CardRank);
-                }
-            });
+                m_CardsView[i].CardClick.SetCard(cards[i]); 
+                m_CardsView[i].SetRank((int)cards[i].CardRank);
+                m_CardsView[i].TurnOverToFront();
+            }
         }
 
         public void SubscribeOnCardSelect(Action<Card> action)
@@ -65,34 +84,5 @@ namespace Core.Battle
                 m_CardsView[i].CardClick.DisableInteractble();
             }
         }
-
-        private async void TurnCardsAway(Action action)
-        {
-            for (int i = 0; i < m_CardsView.Length; i++)
-            {
-                m_CardsView[i].transform.DORotate(new Vector3(0, 90, 0), 0.25f);
-            }
-
-            await UniTask.WaitForSeconds(0.25f);
-
-            OnCardsTurnAway?.Invoke();
-
-            action?.Invoke();
-
-            TurnCardsAround();
-        }
-
-        private async void TurnCardsAround()
-        {
-            for (int i = 0; i < m_CardsView.Length; i++)
-            {
-                m_CardsView[i].transform.DORotate(new Vector3(0, 0, 0), 0.25f);
-            }
-
-            await UniTask.WaitForSeconds(0.25f);
-
-            OnCardsTurnAround?.Invoke();
-        }
-
     }
 }

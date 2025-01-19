@@ -53,12 +53,20 @@ namespace Core.Battle
             m_EventManager.Subscribe<StartBattleSignal, Enemy>(this, StartBattle);
 
             m_BattleUI.SelectCardView.SubscribeOnCardClick(m_SelectOffer.UpdateCards);
-
             m_SelectOffer.OnCardAddedInOffer += m_BattleUI.SelectCardView.UpdateCards;
-            m_BattleUI.SelectCardView.SubscribeOnCardSelect(m_PlayerHand.TakeCard);
 
+            m_BattleUI.SelectCardView.SubscribeOnCardSelect(m_PlayerHand.TakeCard);
             m_PlayerHand.OnTakeCard += m_BattleUI.PlayerHandView.AddCard;
-            m_SelectOffer.UpdateCards();
+
+
+            {
+                m_BattleUI.SelectCardView.Init();
+                m_BattleUI.SelectCardView.StartSelect();
+                //TODO: fix this;
+                m_SelectOffer.UpdateCards();
+
+                m_BattleUI.SelectCardView.InitCards();
+            }
         }
 
         private void Update()
@@ -83,8 +91,6 @@ namespace Core.Battle
 
 
             });
-            
-            //open battle ui
         }
 
         private void EndBattle()

@@ -31,7 +31,8 @@ namespace Core.Battle
         {
             m_Cards[index - 1]
                 .SetRank((int)card.CardRank)
-                .SetType(card.CardType);
+                .SetType(card.CardType)
+                .Apply();
 
             m_Card = m_Cards[index - 1];
 
