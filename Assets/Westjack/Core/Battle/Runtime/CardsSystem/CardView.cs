@@ -9,7 +9,6 @@ namespace Core.Battle
 
         public CardView SetType(CardType type)
         {
-
             return this;
         }
 

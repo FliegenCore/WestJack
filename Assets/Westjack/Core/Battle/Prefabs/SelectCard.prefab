@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 7257221796432348873}
   - component: {fileID: 8556157589075680032}
   - component: {fileID: 8781098303231942493}
+  - component: {fileID: 8609899703187794257}
   - component: {fileID: 3388417053354438920}
-  - component: {fileID: 6277141905575235318}
   m_Layer: 5
-  m_Name: BattleCard
+  m_Name: SelectCard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,6 +78,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8609899703187794257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2772533369701609649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37d6f4e6441eb6f469a58e7f8d789055, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RankText: {fileID: 6461404534503797661}
+  m_CardClick: {fileID: 3388417053354438920}
 --- !u!114 &3388417053354438920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90,20 +104,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb0152717c139ee4381822ebce13d3b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6277141905575235318
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2772533369701609649}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f0b5c147b5145f4b85a2bfd9647eeb5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_RankText: {fileID: 6461404534503797661}
-  m_CardClick: {fileID: 3388417053354438920}
 --- !u!1 &6059629954880135993
 GameObject:
   m_ObjectHideFlags: 0

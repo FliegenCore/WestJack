@@ -1,7 +1,5 @@
-using Common.Utils;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Core.Battle
 {
@@ -28,7 +26,7 @@ namespace Core.Battle
                 return;
             }
 
-            OnCardAddedInOffer(cards);
+            OnCardAddedInOffer?.Invoke(cards);
         }
     }
 }

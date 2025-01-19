@@ -1,21 +1,29 @@
+using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Core.Battle
 {
-    public class SelectCardView : MonoBehaviour
+    public class SelectCardsView : MonoBehaviour
     {
-        [SerializeField] private CardBattleView[] m_CardsView;
+        public event Action OnCardsTurnAway;
+        public event Action OnCardsTurnAround;
+
+        [SerializeField] private CardSelectView[] m_CardsView;
 
         public void UpdateCards(List<Card> cards)
         {
-            for (int i = 0; i < m_CardsView.Length; i++)
+            TurnCardsAway(() =>
             {
-                SubscribeOnCardClick(DisableChoose);
-                m_CardsView[i].CardClick.SetCard(cards[i]);
-                m_CardsView[i].SetRank((int)cards[i].CardRank);
-            }
+                for (int i = 0; i < m_CardsView.Length; i++)
+                {
+                    SubscribeOnCardClick(DisableChoose);
+                    m_CardsView[i].CardClick.SetCard(cards[i]);
+                    m_CardsView[i].SetRank((int)cards[i].CardRank);
+                }
+            });
         }
 
         public void SubscribeOnCardSelect(Action<Card> action)
@@ -58,9 +66,33 @@ namespace Core.Battle
             }
         }
 
-        private void RotateCards()
-        { 
-            
+        private async void TurnCardsAway(Action action)
+        {
+            for (int i = 0; i < m_CardsView.Length; i++)
+            {
+                m_CardsView[i].transform.DORotate(new Vector3(0, 90, 0), 0.25f);
+            }
+
+            await UniTask.WaitForSeconds(0.25f);
+
+            OnCardsTurnAway?.Invoke();
+
+            action?.Invoke();
+
+            TurnCardsAround();
         }
+
+        private async void TurnCardsAround()
+        {
+            for (int i = 0; i < m_CardsView.Length; i++)
+            {
+                m_CardsView[i].transform.DORotate(new Vector3(0, 0, 0), 0.25f);
+            }
+
+            await UniTask.WaitForSeconds(0.25f);
+
+            OnCardsTurnAround?.Invoke();
+        }
+
     }
 }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Core.Battle
 {
-    public class CardBattleView : CardView
+    public class CardSelectView : CardView
     {
         [SerializeField] private CardClick m_CardClick;
 

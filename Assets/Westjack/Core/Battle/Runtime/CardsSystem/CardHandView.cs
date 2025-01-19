@@ -7,26 +7,13 @@ namespace Core.Battle
     {
         //TODO: on hold show info
         private RectTransform m_Transform;
+        private float m_PosX;
 
-        private float m_PositionX;
+        public RectTransform Transform => m_Transform;
 
-        public CardHandView SetX(float x)
-        {
-            m_PositionX = x;
-
-            return this;
-        }
-
-        public CardHandView SetSpawnPositionX(float x)
-        {
-            if (m_Transform == null)
-            {
-                m_Transform = GetComponent<RectTransform>();
-            }
-
-            m_Transform.anchoredPosition = new Vector2(x, m_Transform.anchoredPosition.y);
-
-            return this;
+        public void Init()
+        { 
+            m_Transform = GetComponent<RectTransform>();
         }
 
         public CardHandView Enable()
@@ -36,19 +23,21 @@ namespace Core.Battle
             return this;
         }
 
-        public void Disable()
+        public CardHandView Disable()
         {
-            gameObject.SetActive(false);    
+            gameObject.SetActive(false);
+
+            return this;
+        }
+
+        public void SetOffsetX(float offset)
+        { 
+            m_PosX += offset;
         }
 
         public void Shift()
         {
-            if (m_Transform == null)
-            {
-                m_Transform = GetComponent<RectTransform>();
-            }
-
-            transform.DOLocalMoveX(m_Transform.anchoredPosition.x + m_PositionX, 0.25f);
+            transform.DOLocalMoveX(m_PosX, 0.25f);
         }
     }
 }

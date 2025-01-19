@@ -2,6 +2,7 @@ using Assets;
 using Core.Common;
 using Core.PlayerExperience;
 using Core.UnitEntities;
+using System;
 using UnityEngine;
 
 namespace Core.Battle
@@ -51,31 +52,50 @@ namespace Core.Battle
         {
             m_EventManager.Subscribe<StartBattleSignal, Enemy>(this, StartBattle);
 
+            m_BattleUI.SelectCardView.SubscribeOnCardClick(m_SelectOffer.UpdateCards);
+
             m_SelectOffer.OnCardAddedInOffer += m_BattleUI.SelectCardView.UpdateCards;
             m_BattleUI.SelectCardView.SubscribeOnCardSelect(m_PlayerHand.TakeCard);
 
             m_PlayerHand.OnTakeCard += m_BattleUI.PlayerHandView.AddCard;
+            m_SelectOffer.UpdateCards();
         }
 
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.E))
             {
-                m_SelectOffer.UpdateCards();
+                StartBattle(null);
             }
         }
 
         private void StartBattle(Enemy enemy)
         {
             m_Enemy = enemy;
+            m_CardsDeck.CreateDeck();
+            OpenBattleUI(() =>
+            {
+                m_PlayerHand.TakeCard(m_CardsDeck.TakeCard().Object);
+                m_PlayerHand.TakeCard(m_CardsDeck.TakeCard().Object);
 
+                m_EnemyHand.TakeCard(m_CardsDeck.TakeCard().Object);
+                m_EnemyHand.TakeCard(m_CardsDeck.TakeCard().Object);
+
+
+            });
+            
             //open battle ui
-            //take 2 card for player and enemy
         }
 
         private void EndBattle()
         {
             
+        }
+
+        private void OpenBattleUI(Action action)
+        {
+
+            action.Invoke();
         }
 
         private void OnDestroy()
