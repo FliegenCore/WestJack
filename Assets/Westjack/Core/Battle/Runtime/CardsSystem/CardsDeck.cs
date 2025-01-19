@@ -12,6 +12,8 @@ namespace Core.Battle
 
         public void CreateDeck()
         {
+            m_Cards.Clear();
+
             foreach (CardType suit in System.Enum.GetValues(typeof(CardType)))
             {
                 foreach (CardRank rank in System.Enum.GetValues(typeof(CardRank)))
